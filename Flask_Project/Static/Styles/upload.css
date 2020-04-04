@@ -38,7 +38,21 @@
     border:0;
 }
 
+.droparea {
+      width: 200px;
+      height: 150px;
+      border-style: solid;
+      border-width: 3px;
+      border-style: dotted;
+      border-color: grey;
+      float: center;
+      line-height: 200px;
+      text-align: center;
+  }
 
+div.droparea:hover {
+    background-color: gainsboro;
+}
 
 #element1 {display:inline-block;margin-right:10px;} 
 #element2 {display:inline-block;} 

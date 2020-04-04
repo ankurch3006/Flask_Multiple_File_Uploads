@@ -2,12 +2,15 @@
 <title>Python Flask File Upload Example</title>
 <head>
     <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/upload.css') }}" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='javascript/upload.js')}}"></script>
     <div class="topnav">
         <img id="element1" class="image" src="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcSIVT_DDfVmIxS49b-ynmF3u67Y6p8I1b0y6yrkSjBGc7vBfWTX&usqp=CAU">
         <h1  id="element2" style="color:white;">Multiple File Upload System</h1>
     </div>
 </head>
 <body>
+
     <p>
     	{% with messages = get_flashed_messages() %}
     	  {% if messages %}
@@ -21,6 +24,10 @@
     </p>
     <center><div class="box">
         <form method="post" action="/" enctype="multipart/form-data">
+            <div class="container">
+            <div class="droparea">Drag and Drop Here</div>
+            <div class="tablearea" name="file"></div>
+            </div>
             <dl>
         		<p>
         			<center><input type="file" name="file" autocomplete="off" multiple required></center>
@@ -31,4 +38,5 @@
         	</p>
         </form>
     </div>
+    
 </body>
