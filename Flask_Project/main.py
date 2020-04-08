@@ -3,6 +3,8 @@ import urllib.request
 from app import app
 from flask import Flask, flash, request, redirect, render_template
 from werkzeug.utils import secure_filename
+from pydrive.auth import GoogleAuth
+from pydrive.drive import GoogleDrive
 
 ALLOWED_EXTENSIONS = set(['csv', 'xlsx', 'xls','xlsm', 'xltx', 'xltm', 'xml', 'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
 dest_path = 'C:/Users/ankur/Desktop/Flask_Project'
@@ -16,11 +18,16 @@ def upload_form():
 
 @app.route('/', methods=['POST'])
 def upload_file():
+    g_login = GoogleAuth()
+    g_login.LocalWebserverAuth()
+    drive = GoogleDrive(g_login)
     if request.method == 'POST':
         for file in request.files.getlist('file'):
             if file and allowed_file(file.filename):
                 filename = secure_filename(file.filename)
-                file.save(os.path.join(dest_path, filename))
+                file_drive = drive.CreateFile({'title':os.path.basename(filename) })
+                file_drive.SetContentString(file.read(), filename) 
+                file_drive.Upload()
                 flash('{} successfully uploaded to {}'.format(filename, dest_path))	
             else:
                 flash('file type not allowed')
