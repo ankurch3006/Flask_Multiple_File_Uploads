@@ -5,9 +5,19 @@ from flask import Flask, flash, request, redirect, render_template
 from werkzeug.utils import secure_filename
 from pydrive.auth import GoogleAuth
 from pydrive.drive import GoogleDrive
+from flask_mail import Mail, Message
 
 ALLOWED_EXTENSIONS = set(['csv', 'xlsx', 'xls','xlsm', 'xltx', 'xltm', 'xml', 'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
-dest_path = 'C:/Users/ankur/Desktop/Flask_Project'
+dest_path = 'C:/Users/ankur/Desktop'
+
+app.config.update(
+	DEBUG=True,
+	#EMAIL SETTINGS
+	MAIL_SERVER='smtp.gmail.com',
+	MAIL_PORT=465,
+	MAIL_USE_SSL=True, MAIL_USERNAME = 'ankurch3006@gmail.com', MAIL_PASSWORD = 'Dipa@0111719'
+	)
+mail = Mail(app)
 
 def allowed_file(filename):
 	return '.' in filename and filename.split('.', 1)[1].lower() in ALLOWED_EXTENSIONS
@@ -28,6 +38,10 @@ def upload_file():
                 file_drive = drive.CreateFile({'title':os.path.basename(filename) })
                 file_drive.SetContentString(file.read(), filename) 
                 file_drive.Upload()
+                file.save(os.path.join(dest_path, filename))
+                msg = Message("A File Was Uploaded!", sender="ankurch3006@gmail.com", recipients=["ankurch3006@gmail.com"])
+                msg.body = f"{filename} was uploaded to {dest_path}"           
+                mail.send(msg)
                 flash('{} successfully uploaded to {}'.format(filename, dest_path))	
             else:
                 flash('file type not allowed')
